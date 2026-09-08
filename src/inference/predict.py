@@ -27,4 +27,28 @@ def predict_transaction(transaction: pd.DataFrame) -> dict:
             f"Extra: {sorted(extra_features)}"
         )
 
-    
+    transaction = transaction[expected_features]
+
+    if not all(pd.api.types.is_numeric_dtype(dtype)
+               for dtype in transaction.dtypes):
+        raise TypeError("All transaction features must be numeric. ")
+
+    if transaction.isnull().any().any():
+        raise ValueError("Transaction contains missing values. ")
+
+    if not transaction.map(lambda x: pd.notna(x) and abs(x) != float("inf")).all().all():
+        raise ValueError("Transaction contains infinite values. ")
+
+    scaled_transaction = scaler.transform(transaction)
+
+    fraud_probability = model.predict_proba(
+        scaled_transaction
+    )[:, 1][0]
+
+    prediction = int(fraud_probability >= threshold)
+
+    return{
+        "fraud_probability": float(fraud_probability),
+        "prediction": prediction,
+        "decision": "Fraud" if prediction == 1 else "Legitimate"
+    }
