@@ -14,20 +14,17 @@ threshold = joblib.load(THRESHOLD_PATH)
 
 def predict_transaction(transaction: pd.DataFrame) -> dict:
 
-    if transaction.shape[1] != scaler.n_features_in_:
+    expected_features = list(scaler.feature_name_in_)
+    received_features = list(transaction.columns)
+
+    missing_features = set(expected_features) - set(received_features)
+    extra_features = set(received_features) - set(expected_features)
+
+    if missing_features or extra_features:
         raise ValueError(
-            f"Expected {scaler.n_features_in_} features, "
-            f"but received {transaction.shape[1]}."
+            f"Invalid input columns. "
+            f"Missing: {sorted(missing_features)}; "
+            f"Extra: {sorted(extra_features)}"
         )
 
-    scaled_transaction = scaler.transform(transaction)
-
-    fraud_probability = model.predict_proba(scaled_transaction)[:, 1][0]
-
-    prediction = int(fraud_probability >= threshold)
-
-    return{
-        "fraud_probability": float(fraud_probability),
-        "prediction": prediction,
-        "decision": "Fraud" if prediction == 1 else "Legitimate",
-    }
+    
