@@ -14,7 +14,7 @@ threshold = joblib.load(THRESHOLD_PATH)
 
 def predict_transaction(transaction: pd.DataFrame) -> dict:
 
-    expected_features = list(scaler.feature_name_in_)
+    expected_features = list(scaler.feature_names_in_)
     received_features = list(transaction.columns)
 
     missing_features = set(expected_features) - set(received_features)
