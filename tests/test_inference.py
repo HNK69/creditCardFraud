@@ -31,7 +31,7 @@ def test_prediction_probability_is_valid():
 
     transaction = pd.DataFrame(
         [[0.0] * len(feature_names)],
-        columns = "feature_names",
+        columns = feature_names,
     )
 
     result = predict_transaction(transaction)
@@ -76,7 +76,7 @@ def test_non_numeric_feature_is_rejected():
     transaction = valid_transaction()
     transaction["Amount"] = "invalid"
 
-    with pytest.raises(ValueError):
+    with pytest.raises(TypeError):
         predict_transaction(transaction)
 
 def test_missing_value_is_rejected():
