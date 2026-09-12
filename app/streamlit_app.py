@@ -41,7 +41,7 @@ def load_transaction():
 
 st.button(
     "Load test transaction",
-    on_click = load_transaction()
+    on_click = load_transaction
 )
 
 def reset_transaction():
