@@ -66,3 +66,16 @@ transaction = pd.DataFrame([transaction_data])
 
 st.write("Input shape:", transaction.shape)
 
+if st.button("predict transaction"):
+    result = predict_transaction(transaction)
+
+    st.subheader("Prediction Result")
+
+    st.write(
+        f"fraud probability: {result["fraud_probability"]:.2%}"
+    )
+
+    if result["prediction"] == 1:
+        st.error("⚠️ Fraudulent Transaction")
+    else:
+        st.success("✅ Legitimate Transaction")
