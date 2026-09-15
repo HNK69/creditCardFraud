@@ -11,3 +11,5 @@ models/*.joblib
 
 .env
 .DS_Store
+
+mlflow.db
