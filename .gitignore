@@ -3,7 +3,7 @@ __pycache__/
 *.pyc
 .ipynb_checkpoints/
 
-data/raw/*
+data/raw/*.csv
 data/processed/*
 
 models/*.pkl
