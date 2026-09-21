@@ -24,25 +24,25 @@ st.write(
 
 st.subheader("Transaction Details")
 
-def load_transaction():
+# def load_transaction():
 
-    test_data = pd.read_csv(
-        "data/raw/creditcard.csv"
-    )
+#     test_data = pd.read_csv(
+#         "data/raw/creditcard.csv"
+#     )
 
-    fraud_row = test_data[test_data["Class"] == 1].iloc[0]
+#     fraud_row = test_data[test_data["Class"] == 1].iloc[0]
 
-    st.session_state["time"] = float(fraud_row["Time"])
-    st.session_state["amount"] = float(fraud_row["Amount"])
+#     st.session_state["time"] = float(fraud_row["Time"])
+#     st.session_state["amount"] = float(fraud_row["Amount"])
 
-    for i in range(1,29):
-        st.session_state[f'V{i}'] = float(fraud_row[f"V{i}"])
+#     for i in range(1,29):
+#         st.session_state[f'V{i}'] = float(fraud_row[f"V{i}"])
 
 
-st.button(
-    "Load test transaction",
-    on_click = load_transaction
-)
+# st.button(
+#     "Load test transaction",
+#     on_click = load_transaction
+# )
 
 def reset_transaction():
     st.session_state["amount"] = 100.0

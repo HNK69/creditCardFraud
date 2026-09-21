@@ -1,0 +1,13 @@
+.git
+.github
+.venv
+__pycache__
+*.pyc
+.ipynb_checkpoints
+notebooks
+tests
+data
+dvc-storage
+mlruns
+*.ipynb
+README.md
