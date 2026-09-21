@@ -8,11 +8,37 @@ MODEL_PATH = PROJECT_ROOT / "models" / "final_xgb_model.joblib"
 SCALER_PATH = PROJECT_ROOT/ "models"/ "standard_scaler.joblib"
 THRESHOLD_PATH = PROJECT_ROOT / "models" / "fraud_threshold.joblib"
 
-model = joblib.load(MODEL_PATH)
-scaler = joblib.load(SCALER_PATH)
-threshold = joblib.load(THRESHOLD_PATH)
+def _load_artifacts():
+    """
+    Load the production model artifacts only when they are actually needed.
 
-def predict_transaction(transaction: pd.DataFrame) -> dict:
+    This keeps production inference connected to the real trained model,
+    while allowing unit tests to inject lightweight test artifacts without
+    requiring production model files in the Git repository.
+    """
+    model = joblib.load(MODEL_PATH)
+    scaler = joblib.load(SCALER_PATH)
+    threshold = joblib.load(THRESHOLD_PATH)
+
+    return model, scaler, threshold
+
+def predict_transaction(
+    transaction: pd.DataFrame,
+    model=None,
+    scaler=None,
+    threshold=None,
+) -> dict:
+    """
+    Predict whether a transaction is fraudulent.
+
+    In production, the real model artifacts are loaded automatically.
+    During testing, model, scaler, and threshold can be injected so that
+    tests do not depend on production model files.
+    """
+
+    # Load the real production artifacts only when they were not supplied.
+    if model is None or scaler is None or threshold is None:
+        model, scaler, threshold = _load_artifacts()
 
     expected_features = list(scaler.feature_names_in_)
     received_features = list(transaction.columns)
