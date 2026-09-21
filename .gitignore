@@ -7,7 +7,7 @@ data/raw/*.csv
 data/processed/*
 
 models/*.pkl
-models/*.joblib
+# Production model artifacts are version-controlled
 
 .env
 .DS_Store
